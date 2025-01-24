@@ -67,6 +67,5 @@ export class UserService {
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     };
-    
   }
 }

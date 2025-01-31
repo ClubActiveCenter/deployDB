@@ -1,12 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { registerAs } from '@nestjs/config';
-import { config as dotenvConfig } from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { dbConfig } from './config.envs';
 
-dotenvConfig({ path: `.env` });
-
-const config = {
+const config: DataSourceOptions = {
   type: dbConfig.type,
   host: dbConfig.host,
   port: dbConfig.port,
@@ -15,7 +12,7 @@ const config = {
   database: dbConfig.database,
   synchronize: dbConfig.synchronize,
   logging: dbConfig.logging,
-  dropSchema: dbConfig.dropSchema,
+  dropSchema: true,
   entities: dbConfig.entities,
   migrations: dbConfig.migration,
   ssl: {
@@ -23,6 +20,5 @@ const config = {
   },
 };
 
-
 export default registerAs('typeorm', () => config);
-export const connectionSource = new DataSource(config as DataSourceOptions);
+export const connectionSource = new DataSource(config);

@@ -9,11 +9,11 @@ import { JWTModule } from './jwt.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './Auth/Guard/auth.guard';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import { SendGridModule } from './SendGrid/sendGrid.module';
 import { ProductModule } from './Product/product.module';
 import { PaymentModule } from './Payment/payment.module';
 import { ConfigModule } from '@nestjs/config';
 import { SeederModule } from './Seeder/seeder.module';
+import { SendGridsModule } from './SendGrids/sendGrids.module';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { SeederModule } from './Seeder/seeder.module';
     OrderModule,
     AuthModule,
     JWTModule,
-    SendGridModule,
+    SendGridsModule,
     CloudinaryModule,
     ProductModule,
     SeederModule,

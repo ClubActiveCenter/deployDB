@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/Entities/User.entity';
 import { UserModule } from 'src/User/user.module';
-import { SendGridModule } from 'src/SendGrid/sendGrid.module';
+import { SendGridsModule } from 'src/SendGrids/sendGrids.module';
 
 @Module({
   controllers: [AuthController],
@@ -13,7 +13,7 @@ import { SendGridModule } from 'src/SendGrid/sendGrid.module';
   imports: [
     TypeOrmModule.forFeature([User]),
     forwardRef(() => UserModule),
-    SendGridModule,
+    SendGridsModule,
   ],
   exports: [AuthService],
 })

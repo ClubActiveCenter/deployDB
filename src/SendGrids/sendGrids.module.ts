@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { SendGridConfig } from 'src/config/sendGrid.config';
-import { SendGridService } from './sendGrid.service';
+import { SendGridService } from './sendGrids.service';
 
 @Module({
   providers: [SendGridConfig, SendGridService],
-  exports: [SendGridConfig, SendGridService],
+  exports: [SendGridService],
 })
-export class SendGridModule {}
+export class SendGridsModule {}

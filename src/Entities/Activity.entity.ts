@@ -2,13 +2,8 @@
 import {
   Column,
   Entity,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Reservation } from './Reservation.entity';
-import { Space } from './Space.entity';
 import { v4 as uuid } from 'uuid';
 
 @Entity({ name: 'activities' })

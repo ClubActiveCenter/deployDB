@@ -12,8 +12,8 @@ const config: DataSourceOptions = {
   database: dbConfig.database,
   synchronize: dbConfig.synchronize,
   logging: dbConfig.logging,
-  dropSchema: true,
-  entities: dbConfig.entities,
+  dropSchema: dbConfig.dropSchema,
+  entities: ["./dist/**/*.entity{.js, .ts}"],
   migrations: dbConfig.migration,
   ssl: {
     rejectUnauthorized: false,

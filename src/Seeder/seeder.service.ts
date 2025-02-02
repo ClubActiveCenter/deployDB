@@ -2,7 +2,6 @@ import {
   Injectable,
   InternalServerErrorException,
   OnApplicationShutdown,
-  OnModuleInit,
 } from '@nestjs/common';
 import { Category } from 'src/Entities/Category.entity';
 import { Product } from 'src/Entities/Product.entity';
@@ -13,24 +12,32 @@ import { userMAin } from 'src/UserMain';
 import { DataSource, QueryRunner } from 'typeorm';
 
 @Injectable()
-export class SeeederDB implements OnModuleInit {
+export class SeeederDB {
   constructor(
     private readonly dataSource: DataSource,
     private userService: UserService,
   ) {}
-  async onModuleInit() {
-    return await this.seederDB()
-  }
 
   async seederDB() {
     const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     try {
       await queryRunner.startTransaction();
-      const categories: string[] = Array.from(
+
+      const exist: null | User = await this.userService.getUserByEmail(
+        userMAin.email,
+      );
+      if (!exist) {
+        userMAin.password = await this.userService.hashPassword(
+          userMAin.password,
+        );
+        await queryRunner.manager.save(User, { ...userMAin });
+      }
+
+      const catego: string[] = Array.from(
         new Set(Products.map((product) => product.category)),
       );
-      for (let category of categories) {
+      for (let category of catego) {
         const exist: null | Category = await queryRunner.manager.findOneBy(
           Category,
           { name: category },
@@ -53,15 +60,6 @@ export class SeeederDB implements OnModuleInit {
         }
       }
       console.log('Productos y categorias cargadas a la base de datos.');
-      const exist: null | User = await this.userService.getUserByEmail(
-        userMAin.email,
-      );
-      if (!exist) {
-        userMAin.password = await this.userService.hashPassword(
-          userMAin.password,
-        );
-        await queryRunner.manager.save(User, { ...userMAin });
-      }
       await queryRunner.commitTransaction();
       console.log('Base de datos precargada.');
     } catch (error) {

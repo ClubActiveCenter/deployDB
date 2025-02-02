@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   OnApplicationShutdown,
+  OnModuleInit,
 } from '@nestjs/common';
 import { Category } from 'src/Entities/Category.entity';
 import { Product } from 'src/Entities/Product.entity';
@@ -12,11 +13,14 @@ import { userMAin } from 'src/UserMain';
 import { DataSource, QueryRunner } from 'typeorm';
 
 @Injectable()
-export class SeeederDB {
+export class SeeederDB implements OnModuleInit {
   constructor(
     private readonly dataSource: DataSource,
     private userService: UserService,
   ) {}
+  async onModuleInit() {
+    return await this.seederDB()
+  }
 
   async seederDB() {
     const queryRunner: QueryRunner = this.dataSource.createQueryRunner();

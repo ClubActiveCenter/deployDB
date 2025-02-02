@@ -12,6 +12,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ProductModule } from './Product/product.module';
 import { PaymentModule } from './Payment/payment.module';
 import { ConfigModule } from '@nestjs/config';
+import { SeederModule } from './Seeder/seeder.module';
 import { SendGridsModule } from './SendGrids/sendGrids.module';
 
 @Module({
@@ -25,6 +26,7 @@ import { SendGridsModule } from './SendGrids/sendGrids.module';
     SendGridsModule,
     CloudinaryModule,
     ProductModule,
+    SeederModule,
     PaymentModule,
     ConfigModule,
   ],

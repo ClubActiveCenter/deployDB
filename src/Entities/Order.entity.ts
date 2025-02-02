@@ -16,7 +16,7 @@ import { v4 as uuid } from 'uuid';
 @Entity({ name: 'orders' })
 export class Order {
   @PrimaryGeneratedColumn('uuid')
-  id = uuid();
+  id: string;
 
   @ManyToOne(() => User, (user) => user.orders)
   user: User;

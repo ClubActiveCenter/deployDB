@@ -18,7 +18,7 @@ import { Activity } from './Activity.entity';
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id = uuid();
+  id: string;
 
   @Column({ type: 'varchar', length: 50, nullable: false })
   name: string;

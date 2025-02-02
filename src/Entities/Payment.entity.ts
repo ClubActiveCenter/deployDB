@@ -7,8 +7,8 @@ import { PaymentStatus } from 'src/Payment/PaymentDTO/payment.dto';
 @Entity({ name: 'payments' })
 export class Payment {
   @PrimaryGeneratedColumn('uuid')
-  id = uuid();
-
+  id: string;
+  
   @ManyToOne(() => User, (user) => user.payments, {
     eager: true,
     nullable: false,

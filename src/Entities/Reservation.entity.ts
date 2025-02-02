@@ -7,7 +7,7 @@ import { Space } from './Space.entity';
 @Entity({ name: 'reservations' })
 export class Reservation {
   @PrimaryGeneratedColumn('uuid')
-  id = uuid();
+  id: string;
 
   @Column({ type: 'date', nullable: false, default: new Date() })
   date: Date;

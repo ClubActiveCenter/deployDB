@@ -7,5 +7,5 @@ export const userMAin = {
   phone: '+549197750879',
   address: 'Calle Falsa 123, Ciudad Ficticia',
   dni: 12345678,
-  userStatus: Role.admin
+  isAdmin: true
 };

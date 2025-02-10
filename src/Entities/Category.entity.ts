@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 @Entity({ name: 'categories' })
 export class Category {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id = uuid();
 
   @Column({ type: 'varchar', nullable: false, unique: true })
   name: string;

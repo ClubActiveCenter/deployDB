@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  OnApplicationShutdown,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Category } from 'src/Entities/Category.entity';
 import { Product } from 'src/Entities/Product.entity';
 import { User } from 'src/Entities/User.entity';
@@ -23,21 +19,10 @@ export class SeeederDB {
     await queryRunner.connect();
     try {
       await queryRunner.startTransaction();
-
-      const exist: null | User = await this.userService.getUserByEmail(
-        userMAin.email,
-      );
-      if (!exist) {
-        userMAin.password = await this.userService.hashPassword(
-          userMAin.password,
-        );
-        await queryRunner.manager.save(User, { ...userMAin });
-      }
-
-      const catego: string[] = Array.from(
+      const categories: string[] = Array.from(
         new Set(Products.map((product) => product.category)),
       );
-      for (let category of catego) {
+      for (let category of categories) {
         const exist: null | Category = await queryRunner.manager.findOneBy(
           Category,
           { name: category },
@@ -60,6 +45,15 @@ export class SeeederDB {
         }
       }
       console.log('Productos y categorias cargadas a la base de datos.');
+      const exist: null | User = await this.userService.getUserByEmail(
+        userMAin.email,
+      );
+      if (!exist) {
+        userMAin.password = await this.userService.hashPassword(
+          userMAin.password,
+        );
+        await queryRunner.manager.save(User, { ...userMAin });
+      }
       await queryRunner.commitTransaction();
       console.log('Base de datos precargada.');
     } catch (error) {

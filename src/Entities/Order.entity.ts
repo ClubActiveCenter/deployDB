@@ -1,17 +1,20 @@
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
   OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
+  JoinColumn,
 } from 'typeorm';
 import { User } from './User.entity';
-import { Product } from './Product.entity';
 import { Payment } from './Payment.entity';
-import { StatusOrder } from 'src/Order/OrderDTO/orders.dto';
-import { v4 as uuid } from 'uuid';
+import { OrderItem } from './OrdenItem.entity';
+
+export enum StatusOrder {
+  pending = 'Pending',
+  complete = 'Complete',
+  cancel = 'Canceled',
+}
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -19,20 +22,23 @@ export class Order {
   id: string;
 
   @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToMany(() => Product)
-  @JoinTable()
-  products: Product[];
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { eager: true })
+  orderItems: OrderItem[];
 
   @Column({ type: 'decimal', scale: 2, nullable: false })
   price: number;
 
-  @Column({ type: 'date', default: new Date(), nullable: false })
-  date: Date;
+  @Column({ type: 'decimal', scale: 2 })
+  totalPrice: number;
 
   @Column({ type: 'enum', enum: StatusOrder, default: StatusOrder.pending })
   status: StatusOrder;
+
+  @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP' })
+  date: Date;
 
   @OneToMany(() => Payment, (payment) => payment.order)
   payments: Payment[];

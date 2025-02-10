@@ -3,9 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -14,6 +16,9 @@ import { Order } from './Order.entity';
 import { UserStatus } from 'src/User/UserDTO/users.dto';
 import { v4 as uuid } from 'uuid';
 import { Activity } from './Activity.entity';
+import { Cart } from './Cart.entity';
+import { Payment } from './Payment.entity';
+import { Chat } from './Chat.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -64,5 +69,13 @@ export class User {
 
   @UpdateDateColumn()
   updateUser?: Date;
-  payments: any;
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
+
+  @OneToOne(() => Cart, (cart) => cart.user)
+  cart: Cart;
+
+  @OneToOne(() => Chat, (chat) => chat.user)
+  chat: Chat;
 }

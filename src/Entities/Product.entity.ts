@@ -13,8 +13,8 @@ import { StatusProduct } from 'src/Product/productDTO/product.dto';
 @Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
-  
+  id = uuid();
+
   @Column({ type: 'text', nullable: false })
   img: string;
 

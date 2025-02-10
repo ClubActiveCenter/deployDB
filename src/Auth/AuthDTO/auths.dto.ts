@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { UserStatus } from 'src/User/UserDTO/users.dto';
 
 class UserInfoDTO {
@@ -36,6 +36,12 @@ class UserInfoDTO {
     required: false,
   })
   address?: string;
+
+  @ApiProperty({
+    description: 'Indica si el usuario es Administrador.',
+    example: false,
+  })
+  isAdmin?: boolean;
 
   @ApiProperty({
     description:
@@ -136,4 +142,23 @@ export class BanDTOResponse {
       'Mensaje informativo de si el usuario fue baneado o desbaneado.',
   })
   message: string;
+}
+
+export class LoginDTO {
+  @ApiProperty({
+    description:
+      'La dirección de correo electrónico única del usuario, utilizada para el inicio de sesión y notificaciones.',
+    example: 'usuario@ejemplo.com',
+  })
+  @IsEmail(
+    {},
+    {
+      message:
+        'El correo electrónico debe tener un formato válido, como usuario@dominio.com.',
+    },
+  )
+  @IsNotEmpty({
+    message: 'El correo electrónico es obligatorio y no puede estar vacío.',
+  })
+  email: string;
 }

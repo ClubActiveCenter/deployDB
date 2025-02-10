@@ -21,6 +21,7 @@ import {
 } from 'src/User/UserDTO/users.dto';
 import {
   BanDTOResponse,
+  LoginDTO,
   RefreshTokenDTO,
   SingInDTOResponse,
 } from './AuthDTO/auths.dto';
@@ -49,7 +50,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Iniciar sesión de usuario',
     description:
-      'Este endpoint permite a los usuarios autenticarse en el sistema proporcionando su correo electrónico y contraseña. Si las credenciales son válidas, se genera un token JWT para la sesión.',
+      'Este endpoint permite a los usuarios autenticarse en el sistema proporcionando su correo electrónico y contraseña. Si las credenciales son válidas, se genera un token JWT para la sesión y devuelve cierta información.',
   })
   @SetMetadata('isPublic', true)
   async SignIn(@Body() user: SignInUserDTO): Promise<SingInDTOResponse> {
@@ -78,9 +79,9 @@ export class AuthController {
   @UseGuards(RolesGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Banear o desbanear un usuario',
+    summary: 'Banear o desbanear un usuario (ADMIN)',
     description:
-      'Este endpoint permite banear a un usuario, buscando al usuaurio por su id y luego baneandolo y en caso que ya lo este, poder desbanearlo.',
+      'Este endpoint permite banear a un usuario, buscando al usuaurio por su id y luego baneandolo y en caso que ya lo este, poder desbanearlo. Solo para administradores.',
   })
   async isBan(@Param('id', ParseUUIDPipe) id: string): Promise<BanDTOResponse> {
     return await this.authService.isBan(id);
@@ -105,7 +106,7 @@ export class AuthController {
   @ApiOperation({
     description:
       'Este endpoint actualiza el rol del usurio, convirtiendolo en administrador o quitandole el administrador.',
-    summary: 'Dar o quitar administrador',
+    summary: 'Dar o quitar administrador. (ADMIN)',
   })
   @ApiBearerAuth()
   async isAdmin(
@@ -121,7 +122,7 @@ export class AuthController {
       'Este endpoint permite validar a un usuario solo por email. Esta ruta esta hecha para el uso de auth0.',
     summary: 'sign in con auth0.',
   })
-  async login(@Body() email: string): Promise<SingInDTOResponse> {
+  async login(@Body() email: LoginDTO): Promise<SingInDTOResponse> {
     return await this.authService.login(email);
   }
 }

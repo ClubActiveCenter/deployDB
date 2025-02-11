@@ -44,7 +44,6 @@ export class PaymentController {
     );
   }
 
-
   @ApiOperation({
     summary: 'Manejar eventos de webhook de Stripe',
     description:
@@ -59,10 +58,15 @@ export class PaymentController {
   ) {
     try {
       const rawBody = req.rawBody;
-      await this.paymentService.handleWebhook(rawBody, sig);
+      if (!rawBody) {
+        console.error(' No se encontró rawBody en la solicitud.');
+        return res.status(400).send('rawBody no encontrado');
+      }
 
+      await this.paymentService.handleWebhook(rawBody, sig);
       res.status(200).send('Webhook recibido');
     } catch (err) {
+      console.error(' Error en el webhook:', err.message);
       res.status(400).send(`Webhook Error: ${err.message}`);
     }
   }

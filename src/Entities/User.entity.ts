@@ -18,6 +18,7 @@ import { v4 as uuid } from 'uuid';
 import { Activity } from './Activity.entity';
 import { Cart } from './Cart.entity';
 import { Payment } from './Payment.entity';
+import { SubscriptionDetail } from './SubscriptionDetails.entity';
 import { Chat } from './Chat.entity';
 
 @Entity({ name: 'users' })
@@ -27,6 +28,9 @@ export class User {
 
   @Column({ type: 'varchar', length: 50, nullable: false })
   name: string;
+
+  @Column({ type: 'boolean', default: false, nullable: false })
+  isSubscribed: boolean;
 
   @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
   email: string;
@@ -42,6 +46,9 @@ export class User {
 
   @Column({ type: 'integer', unique: true, nullable: false })
   dni: number;
+
+  @OneToMany(() => SubscriptionDetail, (subscription) => subscription.user)
+  subscriptionsDetails: SubscriptionDetail[];
 
   @ManyToMany(() => Activity)
   @JoinTable()

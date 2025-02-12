@@ -114,8 +114,8 @@ export class PaymentService {
     }
 
     const successUrl =
-      'https://club-active-center.vercel.app/pago/success?session_id={CHECKOUT_SESSION_ID}';
-    const cancelUrl = 'https://club-active-center.vercel.app/pago/cancel';
+      'https://club-active-center.vercel.app/payment/success?session_id={CHECKOUT_SESSION_ID}';
+    const cancelUrl = 'https://club-active-center.vercel.app/payment/cancel';
 
     const session = await this.stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -172,8 +172,9 @@ export class PaymentService {
             quantity: 1,
           },
         ],
-        success_url: `https://tu-dominio.com/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `https://tu-dominio.com/cancel`,
+        success_url:
+          'https://club-active-center.vercel.app/subsPayment/success?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: 'https://club-active-center.vercel.app/subsPayment/cancel',
         metadata: {
           userId,
           subId,

@@ -18,7 +18,6 @@ export class SendGridService {
     };
     try {
       await this.sgMail.send(mail);
-      console.log('Email enviado correctamente');
     } catch (error) {
       console.error('Error enviando email:', error.response.body.errors);
     }
@@ -57,7 +56,6 @@ export class SendGridService {
     };
     try {
       await this.sgMail.send(mail);
-      console.log('Email enviado correctamente');
     } catch (error) {
       console.error('Error enviando email:', error.response.body.errors);
     }
@@ -102,7 +100,6 @@ export class SendGridService {
 
     try {
       await this.sgMail.send(mail);
-      console.log('Email enviado correctamente');
     } catch (error) {
       console.error('Error enviando email:', error.response.body.errors);
     }
@@ -122,7 +119,6 @@ export class SendGridService {
 
     try {
       await this.sgMail.send(mail);
-      console.log('Email enviado correctamente');
     } catch (error) {
       console.error('Error enviando email:', error.response.body.errors);
     }

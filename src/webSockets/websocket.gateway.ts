@@ -39,9 +39,7 @@ export class websockets
 
   private users = new Map<string, Socket>();
 
-  afterInit(server: Server) {
-    console.log('se inicializo con exito!');
-  }
+  afterInit(server: Server) {}
 
   async handleConnection(client: Socket) {
     try {
@@ -64,18 +62,13 @@ export class websockets
 
       client.data.user = user;
       this.users.set(client.id, client);
-
-      console.log(`${user.name} se conecto al chat`);
-      console.log('Usuarios conectados:', Array.from(this.users.keys()));
     } catch (error) {
       console.log(error);
     }
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`${client.data.user.name} se desconecto`);
     this.users.delete(client.id);
-    console.log('Usuarios conectados:', Array.from(this.users.keys()));
   }
 
   private pendingMessages = new Map<string, Message[]>();
@@ -106,33 +99,25 @@ export class websockets
       if (!user) {
         throw new NotFoundException('el usuario no existe');
       }
-
       const chatId = user.chat.id;
       const chat = await this.chatRepository.findOne({
         where: { id: chatId },
       });
-
       if (!chat) {
         const newChat = this.chatRepository.create({ user });
 
         await this.chatRepository.save(newChat);
         throw new NotFoundException('el usuario no tiene un chat asignado');
       }
-
       const sender = payload.isAdmin;
-
       const newMessage = this.messageRepository.create({
         content: data.content,
         sender,
         createdAt: new Date(),
         chat,
       });
-
       await this.messageRepository.save(newMessage);
-      console.log(newMessage);
-
       this.server.emit('mensajeserver', newMessage);
-
       function obtenerRespuestaAutomatica(mensaje: string): string | null {
         const mensajeLower = mensaje.toLowerCase();
         for (const { key, response } of respuestasPredefinidas) {

@@ -1,4 +1,4 @@
-import { Inject, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
   ConnectedSocket,
@@ -20,9 +20,11 @@ import { Repository } from 'typeorm';
 import { Chat } from 'src/Entities/Chat.entity';
 import { User } from 'src/Entities/User.entity';
 import respuestasPredefinidas from './resPredifinidas';
-import { SendGridService } from 'src/SendGrid/sendGrid.service';
 
-@WebSocketGateway({ cors: { origin: '*' } })
+@WebSocketGateway({
+  transports: ['websocket', 'polling'],
+  cors: { origin: '*' },
+})
 export class websockets
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -62,6 +64,7 @@ export class websockets
 
       client.data.user = user;
       this.users.set(client.id, client);
+      console.log(user);
     } catch (error) {
       console.log(error);
     }
@@ -70,8 +73,6 @@ export class websockets
   handleDisconnect(client: Socket) {
     this.users.delete(client.id);
   }
-
-  private pendingMessages = new Map<string, Message[]>();
 
   @SubscribeMessage('mensaje')
   async handleMessage(
@@ -99,25 +100,27 @@ export class websockets
       if (!user) {
         throw new NotFoundException('el usuario no existe');
       }
-      const chatId = user.chat.id;
-      const chat = await this.chatRepository.findOne({
-        where: { id: chatId },
-      });
+      const chat = user.chat;
+
       if (!chat) {
         const newChat = this.chatRepository.create({ user });
 
         await this.chatRepository.save(newChat);
         throw new NotFoundException('el usuario no tiene un chat asignado');
       }
+
       const sender = payload.isAdmin;
+
       const newMessage = this.messageRepository.create({
         content: data.content,
         sender,
         createdAt: new Date(),
         chat,
       });
+
       await this.messageRepository.save(newMessage);
       this.server.emit('mensajeserver', newMessage);
+
       function obtenerRespuestaAutomatica(mensaje: string): string | null {
         const mensajeLower = mensaje.toLowerCase();
         for (const { key, response } of respuestasPredefinidas) {

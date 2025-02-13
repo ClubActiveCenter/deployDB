@@ -31,7 +31,7 @@ export class CartController {
   @ApiOperation({
     summary: 'Verifica si el usuario tiene un carrito activo',
     description:
-      'Si ya existe un carrito activo para el usuario, lo retorna , Si no existe, crea un nuevo carrito vacío, lo asocia con el usuario y lo marca como activo y Si el usuario no se encuentra en la base de datos, lanza un error',
+      'Si ya existe un carrito activo para el usuario, lo retorna. Si no existe, crea un nuevo carrito vacío y lo asocia al usuario.',
   })
   @Get(':userId')
   async getCart(@Param('userId') userId: string) {
